@@ -1,17 +1,16 @@
-# Catfish Coin v0.1.3 / 猫鱼币 v0.1.3
+# Catfish Coin v0.1.4 / 猫鱼币 v0.1.4
 
 ## 中文
 
-本版本改进区块浏览器和挖矿启动检查。
+本版本修复新钱包注册后挖矿地址仍在成熟期时无法继续出块的问题。
 
 更新内容：
 
-- 区块链浏览器的公开区块列表新增出块时间。
-- 出块时间会按本机语言格式显示。
-- 修复已注册钱包在 getwork 挖矿接口被误判为 `unregistered miner` 的问题。
-- 矿工地址验证现在会从 miniblock `KeyHash` 精确解析已注册地址，避免近似 hash 查询误杀。
-- 点击开始挖矿前会检查当前钱包地址是否已满足 DERO 挖矿地址成熟期。
-- 如果地址刚注册但还不能挖矿，会提示还需要大约几个区块，而不是启动 miner 后在日志里刷 `unregistered miner or you need to wait 15 mins`。
+- 如果当前钱包已经注册但矿工地址还在成熟等待期，客户端会临时使用引导地址出块，避免网络停住。
+- 钱包矿工地址成熟后，客户端会自动切回当前钱包地址挖矿。
+- 矿工状态新增 `引导出块中`，区分“正在帮网络推进区块”和“正在挖到自己的钱包”。
+- 钱包状态会显示挖矿地址还需要多少个区块成熟；该成熟度固定按注册 topo + 25 判断，不会再出现先可挖、后不可挖的倒退。
+- 保留 v0.1.3 的区块浏览器出块时间显示，以及矿工地址精确验证修复。
 
 使用方式：
 
@@ -28,16 +27,15 @@
 
 ## English
 
-This release improves the block explorer and mining startup checks.
+This release fixes mining startup when a newly registered wallet is still inside the miner-address maturity window.
 
 Changes:
 
-- Added block time to the public block list in the explorer.
-- Block time is formatted using the local UI language.
-- Fixed a case where registered wallets could be rejected by the getwork mining interface as `unregistered miner`.
-- Miner address validation now resolves registered addresses exactly from miniblock `KeyHash` instead of relying on an approximate hash lookup that could reject valid addresses.
-- The client now checks whether the current wallet address has passed DERO's miner-address maturity window before starting mining.
-- If the address is newly registered but not ready for mining yet, the client shows about how many blocks are still needed instead of starting the miner and filling logs with `unregistered miner or you need to wait 15 mins`.
+- If the current wallet is registered but its miner address is still maturing, the client temporarily mines to the bootstrap address so the network can keep producing blocks.
+- Once the wallet miner address is mature, the client automatically switches mining rewards back to the current wallet address.
+- The miner status now shows `Bootstrap mining` for this temporary state.
+- The wallet status now shows how many blocks remain before the miner address is mature. Maturity is always calculated as registration topo + 25, so the client no longer flips from ready back to not-ready as the chain grows.
+- This keeps the v0.1.3 block-time explorer display and exact miner-address validation fix.
 
 Usage:
 

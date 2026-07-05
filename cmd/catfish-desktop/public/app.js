@@ -66,6 +66,7 @@ const i18n = {
     'status.onlinePeers': '在线 {peers}',
     'status.offline': '离线',
     'status.registering': '注册中',
+    'status.bootstrapMining': '引导出块中',
     'status.mining': '挖矿中',
     'status.minerStopped': '未运行',
     'status.registered': '已上链',
@@ -73,6 +74,7 @@ const i18n = {
     'status.registrationSubmitted': '注册已提交，等待进块',
     'status.registrationConfirming': '已注册，待确认 {blocks} 块',
     'status.registrationSpendable': '已注册可用',
+    'status.minerMaturing': '挖矿地址还需 {blocks} 块成熟',
     'status.unregistered': '未上链',
     'toast.miningStarted': '挖矿已启动',
     'toast.miningStopped': '挖矿已停止',
@@ -150,6 +152,7 @@ const i18n = {
     'status.onlinePeers': 'Online {peers}',
     'status.offline': 'Offline',
     'status.registering': 'Registering',
+    'status.bootstrapMining': 'Bootstrap mining',
     'status.mining': 'Mining',
     'status.minerStopped': 'Stopped',
     'status.registered': 'Registered',
@@ -157,6 +160,7 @@ const i18n = {
     'status.registrationSubmitted': 'Submitted, waiting for block',
     'status.registrationConfirming': 'Registered, {blocks} blocks remaining',
     'status.registrationSpendable': 'Registered and ready',
+    'status.minerMaturing': 'mining address matures in {blocks} blocks',
     'status.unregistered': 'Unregistered',
     'toast.miningStarted': 'Mining started',
     'toast.miningStopped': 'Mining stopped',
@@ -273,23 +277,40 @@ function setLanguage(lang) {
 
 function registrationStatusText(registration, wallet) {
   const remaining = Number(registration.confirmationsRemaining || 0);
+  let text = '';
   switch (registration.status) {
     case 'spendable':
-      return t('status.registrationSpendable');
+      text = t('status.registrationSpendable');
+      break;
     case 'confirming':
-      return t('status.registrationConfirming', { blocks: Math.max(1, remaining) });
+      text = t('status.registrationConfirming', { blocks: Math.max(1, remaining) });
+      break;
     case 'submitted':
-      return t('status.registrationSubmitted');
+      text = t('status.registrationSubmitted');
+      break;
     case 'running':
-      return t('status.registrationPending');
+      text = t('status.registrationPending');
+      break;
     default:
       if (wallet.registered) {
-        return remaining > 0
+        text = remaining > 0
           ? t('status.registrationConfirming', { blocks: Math.max(1, remaining) })
           : t('status.registered');
+        break;
       }
-      return t('status.unregistered');
+      text = t('status.unregistered');
   }
+  const minerLeft = Number(wallet.minerMaturityLeft || 0);
+  if (wallet.registered && minerLeft > 0) {
+    return `${text}; ${t('status.minerMaturing', { blocks: Math.max(1, minerLeft) })}`;
+  }
+  return text;
+}
+
+function minerStatusText(mode) {
+  if (mode === 'registration-bootstrap') return t('status.registering');
+  if (mode === 'maturity-bootstrap') return t('status.bootstrapMining');
+  return t('status.mining');
 }
 
 async function refreshStatus() {
@@ -309,7 +330,7 @@ function renderStatus(data) {
 
   setText('nodeState', daemon.online ? t('status.onlinePeers', { peers: daemon.peers || 0 }) : t('status.offline'));
   setText('height', daemon.online ? `${daemon.height}/${daemon.topoheight}` : '0');
-  setText('minerState', miner.running ? (miner.mode === 'registration-bootstrap' ? t('status.registering') : t('status.mining')) : t('status.minerStopped'));
+  setText('minerState', miner.running ? minerStatusText(miner.mode) : t('status.minerStopped'));
   setText('balance', wallet.balance || '0.00000');
   setText('address', wallet.address || '...');
   setText('balanceFull', wallet.balance || '0.00000');

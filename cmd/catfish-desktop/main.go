@@ -432,7 +432,9 @@ func (a *app) startMiner(ctx context.Context, threads int) error {
 		target = config.Testnet.Dev_Address
 		mode = "registration-bootstrap"
 	} else if err := a.ensureMinerAddressReady(wallet); err != nil {
-		return err
+		target = config.Testnet.Dev_Address
+		mode = "maturity-bootstrap"
+		a.logs.add("miner", []byte("wallet miner address is not mature; mining temporarily to bootstrap address: "+err.Error()))
 	}
 
 	a.mu.Lock()
@@ -473,16 +475,9 @@ func (a *app) ensureMinerAddressReady(wallet *walletapi.Wallet_Disk) error {
 		return fmt.Errorf("当前钱包还没有上链注册，暂时不能作为挖矿地址；请先完成注册")
 	}
 
-	waitUntil := registrationTopo
-	if info.TopoHeight > 25 {
-		waitUntil = registrationTopo + minerAddressMaturity
-	}
-	if info.TopoHeight < waitUntil {
-		remaining := waitUntil - info.TopoHeight
-		if remaining < 1 {
-			remaining = 1
-		}
-		return fmt.Errorf("当前钱包已注册，但挖矿地址还在成熟等待期；还需要大约 %d 个区块后才能开始挖矿（当前 topoheight=%d，注册 topoheight=%d）", remaining, info.TopoHeight, registrationTopo)
+	remaining := minerAddressMaturityRemaining(info.TopoHeight, registrationTopo)
+	if remaining > 0 {
+		return fmt.Errorf("当前钱包已注册，但挖矿地址还在成熟等待期；还需要大约 %d 个区块后才能把挖矿奖励切回当前钱包（当前 topoheight=%d，注册 topoheight=%d）", remaining, info.TopoHeight, registrationTopo)
 	}
 	return nil
 }
@@ -582,11 +577,19 @@ func (a *app) monitorLoop() {
 		if wallet != nil && wallet.GetMode() {
 			_ = wallet.Sync_Wallet_Memory_With_Daemon()
 		}
-		if wallet != nil && wallet.IsRegistered() && miner != nil && miner.running() && miner.target == "registration-bootstrap" {
-			a.logs.add("miner", []byte("wallet registered; switching miner reward address to wallet"))
-			_ = a.startMiner(context.Background(), minerThreads)
+		if wallet != nil && miner != nil && miner.running() && isBootstrapMinerTarget(miner.target) {
+			if wallet.IsRegistered() {
+				if err := a.ensureMinerAddressReady(wallet); err == nil {
+					a.logs.add("miner", []byte("wallet miner address is ready; switching miner reward address to wallet"))
+					_ = a.startMiner(context.Background(), minerThreads)
+				}
+			}
 		}
 	}
+}
+
+func isBootstrapMinerTarget(target string) bool {
+	return target == "registration-bootstrap" || target == "maturity-bootstrap"
 }
 
 func (a *app) startRegistration() {
@@ -693,10 +696,12 @@ func (a *app) handleDesktop(w http.ResponseWriter, r *http.Request) {
 func (a *app) handleStatus(w http.ResponseWriter, r *http.Request) {
 	info := map[string]interface{}{}
 	var daemonInfo rpc.GetInfo_Result
+	daemonOnline := false
 	if err := a.daemonCall("get_info", nil, &daemonInfo); err != nil {
 		info["online"] = false
 		info["error"] = err.Error()
 	} else {
+		daemonOnline = true
 		info["online"] = true
 		info["height"] = daemonInfo.Height
 		info["topoheight"] = daemonInfo.TopoHeight
@@ -734,10 +739,16 @@ func (a *app) handleStatus(w http.ResponseWriter, r *http.Request) {
 		registered := wallet.IsRegistered()
 		registrationHeight := wallet.Get_Registration_TopoHeight()
 		remaining := int64(0)
+		minerMaturityRemaining := int64(0)
 		registrationStatus := "unregistered"
 		spendable := false
+		minerReady := false
 		if registered {
 			remaining = registrationConfirmationsRemaining(daemonInfo.TopoHeight, registrationHeight)
+			if daemonOnline {
+				minerMaturityRemaining = minerAddressMaturityRemaining(daemonInfo.TopoHeight, registrationHeight)
+				minerReady = minerMaturityRemaining == 0
+			}
 			if remaining > 0 {
 				registrationStatus = "confirming"
 			} else {
@@ -755,6 +766,9 @@ func (a *app) handleStatus(w http.ResponseWriter, r *http.Request) {
 			"address":            wallet.GetAddress().String(),
 			"registered":         registered,
 			"registrationHeight": registrationHeight,
+			"minerReady":         minerReady,
+			"minerMaturity":      minerAddressMaturity,
+			"minerMaturityLeft":  minerMaturityRemaining,
 			"height":             wallet.Get_Height(),
 			"daemonHeight":       wallet.Get_Daemon_Height(),
 			"balanceAtomic":      mature + locked,
@@ -1523,6 +1537,17 @@ func registrationConfirmationsRemaining(currentTopo, registrationTopo int64) int
 		return 0
 	}
 	return registrationTopo - checkTopo
+}
+
+func minerAddressMaturityRemaining(currentTopo, registrationTopo int64) int64 {
+	if registrationTopo < 0 {
+		return 0
+	}
+	waitUntil := registrationTopo + minerAddressMaturity
+	if currentTopo >= waitUntil {
+		return 0
+	}
+	return waitUntil - currentTopo
 }
 
 type errAccountWaitingForConfirmations struct{}
