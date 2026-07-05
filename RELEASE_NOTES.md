@@ -1,16 +1,17 @@
-# Catfish Coin v0.1.2 / 猫鱼币 v0.1.2
+# Catfish Coin v0.1.3 / 猫鱼币 v0.1.3
 
 ## 中文
 
-本版本修复注册状态提示不准确的问题。
+本版本改进区块浏览器和挖矿启动检查。
 
 更新内容：
 
-- 钱包页链上状态现在区分“注册交易已提交”“已注册但待确认”“已注册可用”。
-- 已注册但确认数不够时，会显示还差大约几个区块确认。
-- 转账、安装合约、调用合约前的检查会给出更准确的注册状态错误。
-- 如果注册交易已提交但还没进块，会提示等待出块并显示注册交易 TXID。
-- 如果节点已确认注册但本地钱包还没同步，会提示等待同步，而不是误报未注册。
+- 区块链浏览器的公开区块列表新增出块时间。
+- 出块时间会按本机语言格式显示。
+- 修复已注册钱包在 getwork 挖矿接口被误判为 `unregistered miner` 的问题。
+- 矿工地址验证现在会从 miniblock `KeyHash` 精确解析已注册地址，避免近似 hash 查询误杀。
+- 点击开始挖矿前会检查当前钱包地址是否已满足 DERO 挖矿地址成熟期。
+- 如果地址刚注册但还不能挖矿，会提示还需要大约几个区块，而不是启动 miner 后在日志里刷 `unregistered miner or you need to wait 15 mins`。
 
 使用方式：
 
@@ -27,15 +28,16 @@
 
 ## English
 
-This release fixes inaccurate wallet registration status messages.
+This release improves the block explorer and mining startup checks.
 
 Changes:
 
-- The wallet page now distinguishes between "registration submitted", "registered but confirming", and "registered and ready".
-- When the wallet is registered but not confirmed enough, the UI shows about how many blocks are still needed.
-- Transfer, contract install, and contract call preflight checks now report more accurate registration-state errors.
-- If the registration transaction is submitted but not mined yet, the client tells the user to wait for a block and shows the registration TXID.
-- If the node sees the registration but the local wallet has not synced it yet, the client reports a wallet-sync delay instead of saying the account is unregistered.
+- Added block time to the public block list in the explorer.
+- Block time is formatted using the local UI language.
+- Fixed a case where registered wallets could be rejected by the getwork mining interface as `unregistered miner`.
+- Miner address validation now resolves registered addresses exactly from miniblock `KeyHash` instead of relying on an approximate hash lookup that could reject valid addresses.
+- The client now checks whether the current wallet address has passed DERO's miner-address maturity window before starting mining.
+- If the address is newly registered but not ready for mining yet, the client shows about how many blocks are still needed instead of starting the miner and filling logs with `unregistered miner or you need to wait 15 mins`.
 
 Usage:
 

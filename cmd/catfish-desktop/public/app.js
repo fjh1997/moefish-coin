@@ -351,6 +351,23 @@ function displayWalletKind(kind) {
   return map[kind] || kind || '';
 }
 
+function formatBlockTime(timestamp) {
+  const raw = Number(timestamp || 0);
+  if (!Number.isFinite(raw) || raw <= 0) return '';
+  const millis = raw > 1000000000000 ? raw : raw * 1000;
+  const date = new Date(millis);
+  if (Number.isNaN(date.getTime())) return '';
+  return date.toLocaleString(state.lang === 'zh' ? 'zh-CN' : 'en-US', {
+    hour12: false,
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+  });
+}
+
 async function refreshBlocks() {
   try {
     const data = await api('/api/blocks?limit=16');
@@ -372,6 +389,7 @@ async function refreshBlocks() {
       <tr>
         <td>${escapeHtml(block.topoheight)}</td>
         <td>${escapeHtml(block.height)}</td>
+        <td>${escapeHtml(formatBlockTime(block.timestamp))}</td>
         <td>${escapeHtml(transactions.length)} / ${escapeHtml(block.txcount)}</td>
         <td>${escapeHtml(block.reward)}</td>
         <td class="hash">
@@ -381,7 +399,7 @@ async function refreshBlocks() {
       </tr>
     `;
     }).join('');
-    $('blocks').innerHTML = rows || `<tr><td colspan="5">${escapeHtml(t('blocks.empty'))}</td></tr>`;
+    $('blocks').innerHTML = rows || `<tr><td colspan="6">${escapeHtml(t('blocks.empty'))}</td></tr>`;
   } catch (error) {
     toast(error.message);
   }

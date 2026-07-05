@@ -648,8 +648,8 @@ hard_way:
 	}
 
 	for _, hash := range hashes {
-		bits, _, _, err := balance_tree.GetKeyValueFromHash(hash[0:16])
-		if err != nil || bits >= 120 {
+		_, _, addressFound := AddressKeyFromHash(balance_tree, hash)
+		if !addressFound {
 			return
 		}
 		if chain.cache_enabled {
@@ -658,4 +658,16 @@ hard_way:
 	}
 
 	return true
+}
+
+func AddressKeyFromHash(balanceTree *graviton.Tree, hash crypto.Hash) (keyCompressed []byte, balanceSerialized []byte, found bool) {
+	_, keyCompressed, balanceSerialized, err := balanceTree.GetKeyValueFromHash(hash[:16])
+	if err != nil || len(keyCompressed) == 0 {
+		return nil, nil, false
+	}
+	keyHash := graviton.Sum(keyCompressed)
+	if !bytes.Equal(keyHash[:], hash[:]) {
+		return nil, nil, false
+	}
+	return keyCompressed, balanceSerialized, true
 }

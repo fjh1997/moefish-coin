@@ -146,9 +146,11 @@ func (chain *Blockchain) process_miner_transaction(bl *block.Block, genesis bool
 		if mbl.Final {
 			continue
 		}
-		_, key_compressed, balance_serialized, err := balance_tree.GetKeyValueFromHash(mbl.KeyHash[:16])
-		if err != nil {
-			panic(err)
+		var minerHash crypto.Hash
+		copy(minerHash[:], mbl.KeyHash[:])
+		key_compressed, balance_serialized, found := AddressKeyFromHash(balance_tree, minerHash)
+		if !found {
+			panic("registered miniblock miner address could not be resolved")
 		}
 
 		nb := new(crypto.NonceBalance).Deserialize(balance_serialized)

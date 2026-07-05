@@ -61,8 +61,10 @@ func GetBlockHeader(chain *blockchain.Blockchain, hash crypto.Hash) (result rpc.
 			if balance_tree, err1 := ss.GetTree(config.BALANCE_TREE); err1 == nil {
 
 				for _, mbl := range bl.MiniBlocks {
-					bits, key, _, err1 := balance_tree.GetKeyValueFromHash(mbl.KeyHash[0:16])
-					if err1 != nil || bits >= 120 {
+					var minerHash crypto.Hash
+					copy(minerHash[:], mbl.KeyHash[:])
+					key, _, found := blockchain.AddressKeyFromHash(balance_tree, minerHash)
+					if !found {
 						continue
 					}
 					if addr, err1 := rpc.NewAddressFromCompressedKeys(key); err1 == nil {

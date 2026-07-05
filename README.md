@@ -81,12 +81,14 @@ cd catfish-dero
 - 轻量 Go 桌面启动器，不使用 Electron，不捆绑 Node.js。
 - 自动启动本地 `derod`。
 - 手动 CPU 挖矿开关。
+- 已注册地址可稳定作为矿工地址使用，避免 getwork 对有效地址误报未注册。
 - 钱包地址、余额、助记词显示和同步状态。
 - 注册交易已提交、待确认和可用状态提示，并显示剩余确认区块数。
 - 支持带可选加密留言的转账，接收方钱包可解密查看。
 - 发起方提交成功后立即显示待确认转账。
 - 收款方本地节点看到 mempool 交易且钱包能解密时，显示待确认收入。
 - 内置公开区块浏览器，显示区块和交易摘要。
+- 公开区块浏览器显示出块时间。
 - 内置本钱包可解密交易视图。
 - DERO DVM 智能合约安装、调用、查询界面。
 
@@ -205,12 +207,14 @@ For public infrastructure, expose only the P2P port unless you intentionally ope
 - Lightweight Go desktop launcher, with no Electron and no bundled Node.js.
 - Automatic local `derod` startup.
 - Manual CPU mining toggle.
+- Registered addresses can be used reliably as miner addresses without getwork misreporting valid addresses as unregistered.
 - Wallet address, balance, seed display, and sync status.
 - Registration-submitted, confirmation-pending, and ready states with remaining confirmation-block count.
 - Transfers with optional encrypted memo/comment visible to the receiver wallet.
 - Pending outgoing transactions shown immediately after submission.
 - Pending incoming transactions shown when the local node has seen the mempool transaction and the wallet can decrypt it.
 - Public block explorer with block and transaction summaries.
+- Public block explorer shows block time.
 - Wallet transaction view for transactions the wallet can decrypt.
 - DERO DVM smart contract install, call, and query UI.
 

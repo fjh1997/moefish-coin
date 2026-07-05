@@ -44,6 +44,7 @@ const (
 	getworkPort               = "40410"
 	publicSeedNode            = "150.158.101.65:40411"
 	registrationConfirmations = int64(3)
+	minerAddressMaturity      = int64(25)
 )
 
 type app struct {
@@ -430,6 +431,8 @@ func (a *app) startMiner(ctx context.Context, threads int) error {
 		a.startRegistration()
 		target = config.Testnet.Dev_Address
 		mode = "registration-bootstrap"
+	} else if err := a.ensureMinerAddressReady(wallet); err != nil {
+		return err
 	}
 
 	a.mu.Lock()
@@ -454,6 +457,33 @@ func (a *app) startMiner(ctx context.Context, threads int) error {
 	a.miner = proc
 	a.minerThreads = threads
 	a.logs.add("miner", []byte("started miner target="+target+" mode="+mode))
+	return nil
+}
+
+func (a *app) ensureMinerAddressReady(wallet *walletapi.Wallet_Disk) error {
+	if wallet == nil {
+		return fmt.Errorf("钱包还没有准备好，请稍后重试")
+	}
+	var info rpc.GetInfo_Result
+	if err := a.daemonCall("get_info", nil, &info); err != nil {
+		return fmt.Errorf("节点还没有准备好，无法确认挖矿地址状态: %w", err)
+	}
+	registrationTopo := wallet.Get_Registration_TopoHeight()
+	if registrationTopo < 0 {
+		return fmt.Errorf("当前钱包还没有上链注册，暂时不能作为挖矿地址；请先完成注册")
+	}
+
+	waitUntil := registrationTopo
+	if info.TopoHeight > 25 {
+		waitUntil = registrationTopo + minerAddressMaturity
+	}
+	if info.TopoHeight < waitUntil {
+		remaining := waitUntil - info.TopoHeight
+		if remaining < 1 {
+			remaining = 1
+		}
+		return fmt.Errorf("当前钱包已注册，但挖矿地址还在成熟等待期；还需要大约 %d 个区块后才能开始挖矿（当前 topoheight=%d，注册 topoheight=%d）", remaining, info.TopoHeight, registrationTopo)
+	}
 	return nil
 }
 
