@@ -1,29 +1,18 @@
 # Notice / 声明
 
-Catfish Coin / 猫鱼币 is a modified fork of DERO HE for learning, evaluation, and personal research.
+## 中文声明
 
-猫鱼币是 DERO HE 的修改版分叉，仅用于学习、评估和个人研究。
+Catfish Coin / 猫鱼币是 DERO HE 的修改版分叉，仅用于学习、娱乐、技术研究和个人评估。
 
-## Upstream Attribution / 上游归属
+### 上游归属
 
-- Upstream project: DERO HE
-- Upstream repository: https://github.com/deroproject/derohe
-- Upstream license: Research License, included in `LICENSE`
-
-This project keeps the upstream Research License and upstream copyright notices. Commercial use and distribution are outside the rights granted by this repository unless separately licensed by the relevant rights holders.
+- 上游项目：DERO HE
+- 上游仓库：https://github.com/deroproject/derohe
+- 上游许可证：Research License，见本仓库 `LICENSE`
 
 本项目保留上游 Research License 和版权声明。除非另行取得相关权利人的授权，本仓库不授予商业使用和商业分发权利。
 
-## Modification Notice / 修改说明
-
-This fork modifies the upstream codebase to provide:
-
-- Catfish-specific test/public network ID, ports, and seed node configuration.
-- Lowered registration proof-of-work threshold for easier educational testing.
-- A lightweight Windows desktop client.
-- Wallet/balance/transfer/memo/block-explorer/contract UI.
-- Pending outgoing and wallet-decryptable pending incoming transaction display.
-- Windows packaging scripts and release package layout.
+### 修改说明
 
 本分叉对上游代码做了以下修改：
 
@@ -34,8 +23,33 @@ This fork modifies the upstream codebase to provide:
 - 发起方待确认交易和钱包可解密收款方待确认交易显示。
 - Windows 打包脚本和 release 包结构。
 
-## Compliance Notice / 合规提示
-
-This project is not intended for issuance financing, fundraising, exchange matching, brokerage, custody, investment solicitation, payment settlement, money laundering, fraud, gambling, pyramid schemes, illegal mining activity, privacy infringement, or any other illegal or regulated activity.
+### 合规提示
 
 本项目不得用于发行融资、募资、交易撮合、经纪、托管、投资招揽、支付结算、洗钱、诈骗、赌博、传销、非法挖矿活动、侵犯隐私或任何其他违法或受监管活动。
+
+## English Notice
+
+Catfish Coin is a modified fork of DERO HE for learning, entertainment, technical research, and personal evaluation.
+
+### Upstream Attribution
+
+- Upstream project: DERO HE
+- Upstream repository: https://github.com/deroproject/derohe
+- Upstream license: Research License, included in `LICENSE`
+
+This project keeps the upstream Research License and upstream copyright notices. Commercial use and distribution are outside the rights granted by this repository unless separately licensed by the relevant rights holders.
+
+### Modification Notice
+
+This fork modifies the upstream codebase to provide:
+
+- Catfish-specific test/public network ID, ports, and seed node configuration.
+- Lowered registration proof-of-work threshold for easier educational testing.
+- A lightweight Windows desktop client.
+- Wallet/balance/transfer/memo/block-explorer/contract UI.
+- Pending outgoing and wallet-decryptable pending incoming transaction display.
+- Windows packaging scripts and release package layout.
+
+### Compliance Notice
+
+This project is not intended for issuance financing, fundraising, exchange matching, brokerage, custody, investment solicitation, payment settlement, money laundering, fraud, gambling, pyramid schemes, illegal mining activity, privacy infringement, or any other illegal or regulated activity.
