@@ -1,20 +1,16 @@
-# Catfish Coin v0.1.0 / 猫鱼币 v0.1.0
+# Catfish Coin v0.1.1 / 猫鱼币 v0.1.1
 
 ## 中文
 
-这是 Catfish Coin / 猫鱼币的第一个公网主链（实验）发布包。
+本版本主要改进桌面客户端的语言体验和项目说明。
 
-包含：
+更新内容：
 
-- Windows 轻量桌面客户端 `CatfishDero.exe`
-- 自动启动本地公网节点
-- 手动 CPU 挖矿
-- 钱包地址、余额、同步状态
-- 带留言转账
-- 发起方和可解密收款方待确认交易显示
-- 公开区块浏览器
-- 本钱包可解密交易浏览器
-- DERO DVM 智能合约安装、调用、查询
+- 桌面客户端新增中文 / English 切换。
+- 语言选择会保存在本机，下次打开自动沿用。
+- 钱包、转账、合约、浏览器、日志、按钮、状态和常见提示已接入中英文文案。
+- README 新增两张客户端截图。
+- Windows 发布包内的 `README.txt` 改为中文说明在前、英文说明在后。
 
 使用方式：
 
@@ -31,26 +27,22 @@
 
 ## English
 
-This is the first public-chain experimental package for Catfish Coin.
+This release improves the desktop client's language experience and project documentation.
 
-Includes:
+Changes:
 
-- Lightweight Windows desktop client `CatfishDero.exe`
-- Automatic local public-chain node startup
-- Manual CPU mining
-- Wallet address, balance, and sync status
-- Transfers with memo/comment
-- Pending outgoing and wallet-decryptable pending incoming transaction display
-- Public block explorer
-- Wallet-decryptable transaction explorer
-- DERO DVM smart contract install/call/query UI
+- Added Chinese / English switching to the desktop client.
+- The language choice is saved locally and reused on the next launch.
+- Wallet, transfer, contracts, explorer, logs, buttons, status text, and common notifications now use bilingual UI strings.
+- Added two client screenshots to the README.
+- Updated the bundled Windows `README.txt` to place Chinese instructions first and English instructions second.
 
 Usage:
 
 1. Download `catfish-dero-public-windows.zip`
 2. Extract it
 3. Double-click `CatfishDero.exe`
-4. Click `开始挖矿` manually when blocks are needed
+4. Click `Start Mining` / `开始挖矿` manually when blocks are needed
 
 Notice:
 

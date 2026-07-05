@@ -1,5 +1,11 @@
 # Catfish Coin / 猫鱼币
 
+## 界面预览 / Screenshots
+
+![Catfish Coin desktop wallet](docs/images/catfishcoin.png)
+
+![Catfish Coin desktop explorer and transfer](docs/images/catfishcoin2.png)
+
 ## 中文说明
 
 ### 项目简介
@@ -137,7 +143,7 @@ This repository is a modified fork of DERO HE. It is not affiliated with, endors
 2. Download `catfish-dero-public-windows.zip`.
 3. Extract it to any folder on Windows.
 4. Double-click `CatfishDero.exe`.
-5. The node and wallet start automatically. Mining only starts after clicking `开始挖矿`.
+5. The node and wallet start automatically. Mining only starts after clicking `Start Mining` / `开始挖矿`.
 
 Default Catfish public-chain seed:
 

@@ -86,8 +86,36 @@ h2 {
 .top-actions,
 .actions {
   display: flex;
+  align-items: center;
   gap: 10px;
   flex-wrap: wrap;
+}
+
+.language-switch {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid #cfd6cc;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #f4f5f2;
+}
+
+button.lang {
+  min-height: 38px;
+  min-width: 74px;
+  border-radius: 0;
+  background: transparent;
+  color: #4d574d;
+  padding: 0 12px;
+}
+
+button.lang + button.lang {
+  border-left: 1px solid #cfd6cc;
+}
+
+button.lang.active {
+  background: #0f7b63;
+  color: #fff;
 }
 
 .layout {
@@ -339,6 +367,14 @@ td.hash {
   .top-actions,
   .actions {
     width: 100%;
+  }
+
+  .language-switch {
+    flex: 1 1 100%;
+  }
+
+  .language-switch button {
+    flex: 1;
   }
 
   .top-actions button,
