@@ -1,22 +1,23 @@
-# Catfish Coin v0.1.6 / 猫鱼币 v0.1.6
+# Catfish Coin v0.1.7 / 猫鱼币 v0.1.7
 
 ## 中文
 
-本版本修复 PoW 挖矿卡在 9 个 miniblock 后无法出完整块的问题。
+本版本修复新节点同步历史区块时可能卡住的问题。
 
 更新内容：
 
-- 修复 miner 提交 miniblock 后被误判为 `Account Unregistered` / `unregistered miner` 的问题。
-- 修复原因：DERO miniblock 只序列化矿工地址哈希的前 16 字节，节点侧校验不能按完整 32 字节比较。
-- 本地验证已从高度 28 挖到 30，`rejected=0`，钱包余额已增加。
-- 保留 v0.1.5 的区块浏览器分页功能。
+- 修复远端节点从旧高度追同步时，可能把历史 miniblock 误判为 `miner address not registered` 的问题。
+- 根因：同步历史块时，节点用了本地当前 tip 的地址状态窗口去校验历史 miniblock 矿工地址；当本地还停在较低高度时，会误判后续块中的矿工地址未注册。
+- 修复方式：验证候选区块时，按候选区块自己的 topo/成熟窗口读取状态，而不是按当前本地 tip 读取状态。
+- 保留 v0.1.6 的 miniblock 地址哈希前 16 字节兼容修复。
+- 仍然不依赖自动重启或清链；节点应能在现有链数据上继续正常同步。
 
 使用方式：
 
 1. 下载 `catfish-dero-public-windows.zip`
 2. 解压
 3. 双击 `CatfishDero.exe`
-4. 需要出块时手动点击 `开始挖矿`
+4. 节点和钱包会自动启动；需要出块时手动点击 `开始挖矿`
 
 注意：
 
@@ -26,21 +27,22 @@
 
 ## English
 
-This release fixes PoW mining getting stuck after 9 miniblocks without producing a full block.
+This release fixes a sync stall that could affect new or lagging nodes while importing historical blocks.
 
 Changes:
 
-- Fixed miner submissions being incorrectly rejected as `Account Unregistered` / `unregistered miner`.
-- Root cause: DERO miniblocks serialize only the first 16 bytes of the miner address hash, so node-side validation must not compare all 32 bytes.
-- Locally verified mining from height 28 to 30 with `rejected=0`; the wallet balance increased.
-- Keeps the v0.1.5 block explorer pagination feature.
+- Fixed historical miniblocks being incorrectly rejected as `miner address not registered` during catch-up sync.
+- Root cause: historical block validation used the local node's current tip-based address maturity window instead of the candidate block's own topo/maturity window.
+- Fix: candidate block validation now resolves miner address registration state from the candidate block's own historical window.
+- Keeps the v0.1.6 compatibility fix for the first 16 bytes of serialized miniblock miner address hashes.
+- No automatic chain reset or restart workaround is required; nodes should continue syncing with existing chain data.
 
 Usage:
 
 1. Download `catfish-dero-public-windows.zip`
 2. Extract it
 3. Double-click `CatfishDero.exe`
-4. Click `Start Mining` / `开始挖矿` manually when blocks are needed
+4. The node and wallet start automatically. Click `Start Mining` manually when blocks are needed.
 
 Notice:
 
