@@ -25,11 +25,11 @@
 </div>
 
 <p align="center">
-  <img src="./docs/images/catfishcoin.png" alt="Moefish Coin desktop wallet" width="680" />
+  <img src="./docs/images/moefish-wallet.png" alt="Moefish Coin wallet UI" width="680" />
 </p>
 
 <p align="center">
-  <img src="./docs/images/catfishcoin2.png" alt="Moefish Coin explorer and transfer" width="680" />
+  <img src="./docs/images/moefish-explorer.png" alt="Moefish Coin explorer UI" width="680" />
 </p>
 
 ## Overview
