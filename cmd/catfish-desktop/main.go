@@ -540,7 +540,10 @@ func (p *managedProcess) stop() error {
 		return nil
 	}
 	if runtime.GOOS == "windows" {
-		_ = exec.Command("taskkill", "/T", "/F", "/PID", strconv.Itoa(p.cmd.Process.Pid)).Run()
+		// Hide the brief console flash from taskkill.exe.
+		kill := exec.Command("taskkill", "/T", "/F", "/PID", strconv.Itoa(p.cmd.Process.Pid))
+		setProcessAttrs(kill)
+		_ = kill.Run()
 	} else {
 		_ = p.cmd.Process.Signal(os.Interrupt)
 		time.Sleep(500 * time.Millisecond)
