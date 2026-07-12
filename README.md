@@ -3,9 +3,11 @@
 <div align="center">
   <img src="./docs/images/catfish-logo.svg" alt="Catfish Coin" width="112" />
   <h1>Catfish Coin / 猫鱼币</h1>
-  <p>一个基于 <b>DERO HE</b> 修改的实验性隐私链客户端，提供 <b>公网参与 + 自建链部署 + Windows 桌面钱包</b>。</p>
+  <p><b>Catfish Coin（猫鱼币）</b>是一种基于 <b>DERO Homomorphic Encryption</b> 的<strong>新型实验性隐私加密货币</strong>：默认加密余额与转账、原生智能合约、CPU 可参与挖矿，并提供可双击启动的 Windows 桌面钱包。</p>
+  <p>一句话：它不是“又一个交易所代币”，而是一条可本地运行、可公开参与的<strong>隐私加密货币网络</strong>，同时支持公网主链与自建链部署。</p>
 
   <p>
+    <img alt="Type" src="https://img.shields.io/badge/Type-Privacy%20Cryptocurrency-0b7285?style=flat-square" />
     <img alt="Core" src="https://img.shields.io/badge/Core-DERO%20HE-167c99?style=flat-square" />
     <img alt="Desktop" src="https://img.shields.io/badge/Desktop-Go%20Native-f7b733?style=flat-square" />
     <img alt="Mining" src="https://img.shields.io/badge/Mining-Manual%20CPU-2da44e?style=flat-square" />
@@ -32,30 +34,53 @@
 
 ## Overview
 
-猫鱼币的目标很直接：
+**猫鱼币是一种新型实验性隐私加密货币（privacy cryptocurrency）。**
 
-- 让普通 Windows 用户可以双击启动一个实验性隐私链客户端
-- 自动启动本地节点和钱包，手动控制 CPU 挖矿
-- 支持余额、转账、留言、可解密交易和区块浏览器
-- 支持 DERO DVM 智能合约安装、调用和查询
-- 支持两种玩法：直接参与 Catfish 公网主链，或 fork 后部署自己的链
+它继承了 DERO HE 路线中最关键的加密货币属性：
 
-本仓库是 DERO HE 的修改版分叉项目，与 DERO Project 无隶属、认可或赞助关系。本项目仅供学习、娱乐、技术研究和评估。
+- **原生币与账户模型**：不是合约上贴的 ERC-20/BEP-20，而是链自身发行与结算的加密货币
+- **同态加密隐私**：余额与转账金额默认加密，公开浏览只能看到公开元数据
+- **PoW / CPU 挖矿**：普通电脑可参与出块，手动开启挖矿，降低一键占满 CPU 的干扰
+- **原生智能合约（DVM）**：可在隐私链上安装、调用、查询合约
+- **桌面优先客户端**：Windows 用户解压后双击即可启动节点 + 钱包 + 浏览器
+
+同时保留两种参与方式：
+
+- 直接加入 Catfish 公网主链
+- fork 后部署自己的隐私加密货币网络
+
+本仓库是 DERO HE 的修改版分叉项目，与 DERO Project 无隶属、认可或赞助关系。本项目仅供学习、娱乐、技术研究和评估，**不构成投资、募资或收益承诺**。
+
+## What Kind of Cryptocurrency
+
+如果把常见加密货币粗略分成几类，猫鱼币更接近“隐私币 + 可编程链 + 可挖矿原生币”这一支，而不是交易所平台币或纯应用代币：
+
+| 类型 | 代表方向 | 猫鱼币怎么对应 |
+| --- | --- | --- |
+| 隐私加密货币 | Monero / Firo / Pirate Chain | 默认隐藏金额与参与方，强调可互换性与隐私结算 |
+| 同态加密 / 账户隐私链 | DERO HE | 基于 HE 账户模型，余额始终加密结算 |
+| 可编程隐私链 | DERO DVM / 同类隐私智能合约链 | 原生合约，不必另挂一层公开 L2 |
+| 桌面可挖矿原生币 | 传统 PoW 币客户端体验 | Windows 桌面端本地节点 + 手动 CPU 挖矿 |
+
+猫鱼币的实验重点不是“再发一个概念币”，而是验证：
+
+> **一条真正可本地运行的隐私加密货币，能否被普通用户像装软件一样打开、挖矿、转账、看浏览器、跑合约。**
 
 ## Why This Exists
 
-很多开源链要么偏服务端、要么挖矿门槛高、要么智能合约和钱包体验分散。Catfish Coin 主要是为了验证一个更轻的实验方向：
+很多开源加密货币项目要么偏服务端节点、要么挖矿门槛高、要么钱包/合约/浏览器体验分散。Catfish Coin 想验证一个更轻、更可触摸的实验方向：
 
-- 一个普通用户下载 zip 后，能直接打开桌面客户端
+- 一个普通用户下载 zip 后，就能直接打开桌面加密货币客户端
 - 节点、钱包、挖矿、转账、区块浏览器放在同一个本地页面里
 - CPU 挖矿必须手动开启，避免一打开就占用算力
 - 隐私链公开浏览器只展示公开可见信息，本地钱包视图只展示自己能解密的交易
 - seed 节点只负责发现和同步入口，不负责控制链
 
-当前版本已经修复 DERO miniblock 矿工地址哈希校验问题。v0.1.6 本地验证从高度 28 挖到 30，`rejected=0`，钱包余额正常增加。
+当前版本已经修复 DERO miniblock 矿工地址哈希校验问题。v0.1.7 起历史高度兼容校验已加强；更早的 v0.1.6 本地验证从高度 28 挖到 30，`rejected=0`，钱包余额正常增加。
 
 ## Highlights
 
+- **新型实验性隐私加密货币**：原生币 + 同态加密账户模型，不是交易所平台代币
 - 原生 Go 桌面启动器，不使用 Electron，不捆绑 Node.js
 - 双击 `CatfishDero.exe` 自动启动本地 `derod` 和钱包
 - 手动 `开始挖矿 / 停止挖矿`，避免默认占用 CPU
@@ -200,9 +225,34 @@ Use and distribution of this technology is subject to the Java Research License 
 
 ### Overview
 
-Catfish Coin is an experimental DERO HE-based privacy blockchain client for learning, entertainment, technical research, and evaluation. It provides a Windows desktop wallet, local node startup, manual CPU mining, transfers with memos, wallet-decryptable transaction views, a public block explorer, and DERO DVM smart contract tools.
+**Catfish Coin is a new experimental privacy cryptocurrency.**
 
-This repository is a modified fork of DERO HE. It is not affiliated with, endorsed by, or sponsored by the DERO Project.
+It is built on the DERO Homomorphic Encryption stack and is meant to feel like a real cryptocurrency network you can run locally:
+
+- a native coin with an account-based ledger, not an ERC-20/BEP-20 wrapper
+- default encrypted balances and transfers
+- PoW / manual CPU mining
+- native DVM smart contracts
+- a Windows desktop client that starts node + wallet + explorer together
+
+You can join the Catfish public chain, or fork the project and deploy your own privacy cryptocurrency network.
+
+This repository is a modified fork of DERO HE. It is not affiliated with, endorsed by, or sponsored by the DERO Project. It is for learning, entertainment, technical research, and evaluation only, and it is **not an investment, fundraising, or yield product**.
+
+### What Kind of Cryptocurrency
+
+Catfish Coin sits closer to privacy coins and programmable privacy chains than to exchange tokens or app-only assets:
+
+| Category | Nearby examples | Catfish Coin |
+| --- | --- | --- |
+| Privacy cryptocurrency | Monero / Firo / Pirate Chain | Encrypted amounts and participants by default |
+| Homomorphic / account privacy chain | DERO HE | HE account model with encrypted balance settlement |
+| Programmable privacy chain | DERO DVM-style contracts | Native contracts without a separate public L2 |
+| Desktop-minable native coin | Classic PoW coin clients | Local Windows node + manual CPU mining |
+
+The experiment is simple:
+
+> Can an ordinary user download a zip, open a privacy cryptocurrency client, mine, transfer, browse blocks, and run contracts — without assembling a server stack first?
 
 ### Join the Public Chain
 
@@ -244,6 +294,7 @@ For public infrastructure, expose only the P2P port unless you intentionally ope
 
 ### Features
 
+- A new experimental privacy cryptocurrency with encrypted balances/transfers and a native coin
 - Native Go desktop launcher, no Electron and no bundled Node.js
 - Automatic local `derod` and wallet startup
 - Manual CPU mining toggle
