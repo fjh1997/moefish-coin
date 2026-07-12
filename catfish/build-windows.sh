@@ -10,14 +10,19 @@ cd "$ROOT"
 GOOS=windows GOARCH=amd64 go build -o "$DIST/bin/derod.exe" ./cmd/derod
 GOOS=windows GOARCH=amd64 go build -o "$DIST/bin/dero-miner.exe" ./cmd/dero-miner
 GOOS=windows GOARCH=amd64 go build -o "$DIST/bin/dero-wallet-cli.exe" ./cmd/dero-wallet-cli
+
+# Windows GUI binary; cmd/catfish-desktop/rsrc_windows_amd64.syso embeds the app icon.
 GOOS=windows GOARCH=amd64 go build -ldflags="-H=windowsgui" -o "$DIST/CatfishDero.exe" ./cmd/catfish-desktop
 
+# Also ship the logo next to the exe for convenience.
+cp -f "$ROOT/cmd/catfish-desktop/public/logo.png" "$DIST/logo.png"
 cat > "$DIST/README.txt" <<'EOF'
-Catfish DERO Desktop / 猫鱼币桌面客户端
+Catfish Coin Desktop / 猫鱼币桌面客户端
 
 中文说明
 
-双击 CatfishDero.exe 启动 Catfish 公网主链（实验）客户端。
+Catfish Coin（猫鱼币）是一种新型实验性隐私加密货币客户端。
+双击 CatfishDero.exe 启动 Catfish 公网主链客户端。
 程序会自动启动节点和钱包；CPU 挖矿只有点击“开始挖矿”后才会启动。
 客户端支持中文和英文切换。
 
@@ -29,7 +34,8 @@ Catfish DERO Desktop / 猫鱼币桌面客户端
 
 English
 
-Double-click CatfishDero.exe to start the Catfish public-chain experimental client.
+Catfish Coin is an experimental privacy cryptocurrency client.
+Double-click CatfishDero.exe to start the Catfish public-chain client.
 The app starts the node and wallet automatically. CPU mining starts only after clicking the mining button.
 The client supports switching between Chinese and English.
 
