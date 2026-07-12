@@ -16,7 +16,7 @@
   </p>
 
   <p>
-    <a href="https://github.com/fjh1997/catfish-coin/releases">下载发布版 / Releases</a>
+    <a href="https://github.com/fjh1997/moefish-coin/releases">下载发布版 / Releases</a>
     ·
     <a href="./RELEASE_NOTES.md">更新说明 / Release Notes</a>
     ·
@@ -98,7 +98,7 @@
 
 ### 方式一：直接参与 Moefish 公网主链
 
-1. 打开 [GitHub Releases](https://github.com/fjh1997/catfish-coin/releases)。
+1. 打开 [GitHub Releases](https://github.com/fjh1997/moefish-coin/releases)。
 2. 下载 `moefish-dero-public-windows.zip`。
 3. 在 Windows 上解压到任意目录。
 4. 双击 `MoefishDero.exe`。
@@ -107,7 +107,7 @@
 当前发布版：
 
 ```text
-https://github.com/fjh1997/catfish-coin/releases/latest
+https://github.com/fjh1997/moefish-coin/releases/latest
 ```
 
 默认 Moefish 公网主链 seed：
@@ -256,7 +256,7 @@ The experiment is simple:
 
 ### Join the Public Chain
 
-1. Open [GitHub Releases](https://github.com/fjh1997/catfish-coin/releases).
+1. Open [GitHub Releases](https://github.com/fjh1997/moefish-coin/releases).
 2. Download `moefish-dero-public-windows.zip`.
 3. Extract it to any folder on Windows.
 4. Double-click `MoefishDero.exe`.
